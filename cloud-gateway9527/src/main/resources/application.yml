@@ -1,0 +1,42 @@
+server:
+  port: 9527
+  
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: payment-routh
+        uri: http://localhost:8008
+        predicates:
+        - Path=/payment/hystrix/ok/**
+#        - After=2021-02-05T15:10:03.685+08:00[Asia/Shanghai]               #      ZoneDateTime.now()
+#        - Before=2021-02-05T15:10:03.685+08:00[Asia/Shanghai]
+#        - Between=2021-02-05T15:10:03.685+08:00[Asia/Shanghai],2021-02-06T15:10:03.685+08:00[Asia/Shanghai]
+#        - Cookie=username,zzyy
+#        - Header=X-Request-Id,\d+
+#        - Host=*.killbuqs.de
+#        - Method=GET
+#        - Query=username, \d+
+#        - Query=username
+      - id: payment-routh2
+        uri: lb://cloud-payment-service-hystrix
+        predicates:
+        - Path=/payment/hystrix/timeout/**
+#        filters:
+#        - AddRequestParameter=red,blue   # red=blue
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  instance:
+    instance-id: gateway(${server.port})
+    prefer-ip-address: true
+
