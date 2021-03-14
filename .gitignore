@@ -68,5 +68,5 @@ secrets.yml
 .sts4-cache
 
 # mysql
-mysql/data/
-mysql/log/
+**/mysql/data/
+**/mysql/log/
